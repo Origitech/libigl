@@ -21,11 +21,12 @@ IGL_INLINE std::string igl::path_to_executable()
   // http://pastebin.com/ffzzxPzi
   using namespace std;
   std::string path;
-  char buffer[1024];
+  wchar_t buffer[1024];
   std::uint32_t size = sizeof(buffer);
 #if defined (WIN32)
   GetModuleFileName(nullptr,buffer,size);
-  path = buffer;
+  std::wstring wsbuffer = buffer;
+  path = std::string(wsbuffer.begin(), wsbuffer.end());
 #elif defined (__APPLE__)
   if(_NSGetExecutablePath(buffer, &size) == 0)
   {
