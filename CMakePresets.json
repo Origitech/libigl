@@ -1,0 +1,66 @@
+{
+    "version": 4,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 23
+    },
+    "configurePresets": [
+        {
+            "name": "default_config",
+            "hidden": true,
+            "binaryDir": "build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS": "/MP /EHa /DWIN32  /std:c++17",
+            }
+        },
+        {
+            "name": "ci_config_release",
+            "displayName": "ci_config_release",
+            "description": "CI system preset using msvc2022 targeting x64 system in release mode",
+            "generator": "Visual Studio 17 2022",
+            "inherits": [
+                "default_config"
+            ],
+            "cacheVariables": {}
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "default_build",
+            "hidden": true,
+            "verbose": true,
+            "nativeToolOptions": [
+                // "/m"
+            ]
+        },
+        {
+            "name": "ci_build_release",
+            "description": "",
+            "displayName": "",
+            "inherits": [
+                "default_build"
+            ],
+            "configurePreset": "ci_config_release",
+            "configuration": "Release"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "ci_test_release",
+            "displayName": "ci_test_release",
+            "configurePreset": "ci_config_release",
+            // for multi-configuration generators, could have multiple build configuration using the same configuration file
+            "configuration": "Release",
+            "output": {
+                "outputLogFile": "build/log/test-log-${presetName}.txt", //path to a log file
+                "verbosity": "verbose"
+            },
+            "filter": {
+                // equivalent to ctest --exclude-regex
+                "exclude": {
+                    "name": ""
+                }
+            }
+        }
+    ]
+}
